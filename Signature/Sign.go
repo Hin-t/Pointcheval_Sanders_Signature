@@ -1,6 +1,7 @@
 package Signature
 
 import (
+	"bytes"
 	"crypto/rand"
 	"fmt"
 	"github.com/cloudflare/bn256"
@@ -39,15 +40,15 @@ func NewPublicParams() *PublicParams {
 // GenerateKeyPair GenerateKeyPair生成密钥对
 func (pp *PublicParams) GenerateKeyPair() (*big.Int, *bn256.G2) {
 	privateKey, _ := rand.Int(rand.Reader, pp.Order) // 生成随机私钥
-	publicKey := pp.BaseG2.ScalarBaseMult(privateKey)
+	publicKey := new(bn256.G2).ScalarMult(pp.BaseG2, privateKey)
 	return privateKey, publicKey
 }
 
-// 验证公私钥
+// VerifyKey 验证公私钥
 func (ps *Pointcheval_Sanders_Signature) VerifyKey() bool {
 	var b bool = true
 	for i := 0; i < ps.Count; i++ {
-		b = b && (ps.PriKey.PublicKey[i] == ps.PublicParams.BaseG2.ScalarBaseMult(ps.PriKey.PrivateKey[i]))
+		b = b && (ps.PriKey.PublicKey[i].String() == new(bn256.G2).ScalarMult(ps.PublicParams.BaseG2, ps.PriKey.PrivateKey[i]).String())
 	}
 	return b
 }
@@ -63,9 +64,9 @@ func (ps *Pointcheval_Sanders_Signature) Setup() {
 }
 
 func (ps *Pointcheval_Sanders_Signature) Sign() (sigma1, sigma2 *bn256.G1) {
-	h := new(bn256.G1).ScalarMult(ps.PublicParams.BaseG1, big.NewInt(1))
+	h := new(bn256.G1).ScalarMult(ps.PublicParams.BaseG1, big.NewInt(100))
 	sigma1 = h
-	pow := ps.PriKey.PrivateKey[0]
+	pow := new(big.Int).Mul(ps.PriKey.PrivateKey[0], big.NewInt(1))
 	for i := 1; i < ps.Count; i++ {
 		pow.Add(pow, new(big.Int).Mul(ps.Message[i], ps.PriKey.PrivateKey[i]))
 	}
@@ -77,17 +78,14 @@ func (ps *Pointcheval_Sanders_Signature) Sign() (sigma1, sigma2 *bn256.G1) {
 func (ps *Pointcheval_Sanders_Signature) Verify() bool {
 	sigma1 := ps.Signature[0]
 	sigma2 := ps.Signature[1]
-
-	prod := ps.PriKey.PublicKey[0]
-
+	prod := new(bn256.G2).ScalarMult(ps.PriKey.PublicKey[0], big.NewInt(1))
 	for i := 1; i < ps.Count; i++ {
 		prod.Add(prod, new(bn256.G2).ScalarMult(ps.PriKey.PublicKey[i], ps.Message[i]))
 	}
-
 	pair1 := bn256.Pair(sigma1, prod)
 	pair2 := bn256.Pair(sigma2, ps.PublicParams.BaseG2)
 	fmt.Printf("pair1 : %v , \n pair2 : %v\n", pair1, pair2)
-	return pair1 == pair2
+	return bytes.Equal(pair1.Marshal(), pair2.Marshal())
 
 }
 
