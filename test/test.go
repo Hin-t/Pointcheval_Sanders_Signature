@@ -8,14 +8,16 @@ import (
 	"math/big"
 )
 
+const MessageNum = 4
+
 func main() {
 
 	ps := &Signature.Pointcheval_Sanders_Signature{
 		PublicParams: nil,
-		PriKey:       &Signature.PrivateKey{PrivateKey: make([]*big.Int, 2), PublicKey: make([]*bn256.G2, 2)},
-		Count:        2,
-		Message:      []*big.Int{big.NewInt(0), big.NewInt(100)},
-		Signature:    make([]*bn256.G1, 2),
+		PriKey:       &Signature.PrivateKey{PrivateKey: make([]*big.Int, MessageNum), PublicKey: make([]*bn256.G2, MessageNum)},
+		Count:        3,
+		Message:      []*big.Int{big.NewInt(0), big.NewInt(1200), big.NewInt(2312), big.NewInt(4234)},
+		Signature:    make([]*bn256.G1, MessageNum),
 	}
 
 	ps.Setup()
@@ -31,8 +33,8 @@ func main() {
 	fmt.Println("baseG2:", ps.PublicParams.BaseG2)
 	fmt.Println("baseGT:", ps.PublicParams.BaseGT)
 	fmt.Printf("verify: %v\n", ps.Verify())
-	fmt.Println("privateKey:", ps.PriKey.PrivateKey)
-	fmt.Println("publicKey:", ps.PriKey.PublicKey)
+	//fmt.Println("privateKey:", ps.PriKey.PrivateKey)
+	//fmt.Println("publicKey:", ps.PriKey.PublicKey)
 
 	//NewTest()
 

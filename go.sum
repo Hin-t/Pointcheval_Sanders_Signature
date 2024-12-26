@@ -1,3 +1,5 @@
+github.com/RyuaNerin/go-krypto v1.3.0 h1:smavTzSMAx8iuVlGb4pEwl9MD2qicqMzuXR2QWp2/Pg=
+github.com/RyuaNerin/go-krypto v1.3.0/go.mod h1:9R9TU936laAIqAmjcHo/LsaXYOZlymudOAxjaBf62UM=
 github.com/cloudflare/bn256 v0.0.0-20241212004005-a4a408366973 h1:IkstbQa+fp4LX+BuPT0mZ/8VCmHaY5hKAAUcRs1ix6A=
 github.com/cloudflare/bn256 v0.0.0-20241212004005-a4a408366973/go.mod h1:ano44GjhV5exAV5XnxwWiQND1VwM79p7JJb+AhET9ig=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=

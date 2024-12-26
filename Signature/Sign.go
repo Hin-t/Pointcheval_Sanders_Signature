@@ -1,8 +1,8 @@
 package Signature
 
 import (
+	"AggregateSignature/Models"
 	"bytes"
-	"crypto/rand"
 	"fmt"
 	"github.com/cloudflare/bn256"
 	"math/big"
@@ -14,34 +14,13 @@ type PublicParams struct {
 	BaseGT *bn256.GT
 	Order  *big.Int
 }
-type PrivateKey struct {
-	PrivateKey []*big.Int
-	PublicKey  []*bn256.G2
-}
 
 type Pointcheval_Sanders_Signature struct {
-	PublicParams *PublicParams
-	PriKey       *PrivateKey
+	PublicParams *Models.PublicParams
+	PriKey       *Models.Key
 	Message      []*big.Int
 	Signature    []*bn256.G1
 	Count        int
-}
-
-// 初始化公共参数
-func NewPublicParams() *PublicParams {
-	return &PublicParams{
-		Order:  bn256.Order,
-		BaseG1: new(bn256.G1).ScalarBaseMult(big.NewInt(1)), // G1 的基点
-		BaseG2: new(bn256.G2).ScalarBaseMult(big.NewInt(1)), // G2 的基点
-		BaseGT: new(bn256.GT).ScalarBaseMult(big.NewInt(1)), // G2 的基点
-	}
-}
-
-// GenerateKeyPair GenerateKeyPair生成密钥对
-func (pp *PublicParams) GenerateKeyPair() (*big.Int, *bn256.G2) {
-	privateKey, _ := rand.Int(rand.Reader, pp.Order) // 生成随机私钥
-	publicKey := new(bn256.G2).ScalarMult(pp.BaseG2, privateKey)
-	return privateKey, publicKey
 }
 
 // VerifyKey 验证公私钥
@@ -56,7 +35,7 @@ func (ps *Pointcheval_Sanders_Signature) VerifyKey() bool {
 // Setup 初始化公共参数
 func (ps *Pointcheval_Sanders_Signature) Setup() {
 	// 初始化公共参数
-	ps.PublicParams = NewPublicParams()
+	ps.PublicParams = Models.NewPublicParams()
 	// 初始化公私钥
 	for i := 0; i < ps.Count; i++ {
 		ps.PriKey.PrivateKey[i], ps.PriKey.PublicKey[i] = ps.PublicParams.GenerateKeyPair()
@@ -89,8 +68,8 @@ func (ps *Pointcheval_Sanders_Signature) Verify() bool {
 
 }
 
-func AggrSign() {
-
-}
-
-func AggrVerify() {}
+//func AggrSign() {
+//
+//}
+//
+//func AggrVerify() {}
