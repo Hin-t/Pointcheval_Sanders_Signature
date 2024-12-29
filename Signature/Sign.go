@@ -8,13 +8,6 @@ import (
 	"math/big"
 )
 
-type PublicParams struct {
-	BaseG1 *bn256.G1
-	BaseG2 *bn256.G2
-	BaseGT *bn256.GT
-	Order  *big.Int
-}
-
 type Pointcheval_Sanders_Signature struct {
 	PublicParams *Models.PublicParams
 	PriKey       *Models.Key
