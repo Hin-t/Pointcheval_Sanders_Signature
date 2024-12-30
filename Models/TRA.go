@@ -1,5 +1,5 @@
 package Models
 
 type TRA struct {
-	Key *Key
+	Key *Key1
 }

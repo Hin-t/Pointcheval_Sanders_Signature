@@ -10,7 +10,7 @@ const Secret = 1024
 var (
 	pp  = Models.NewPublicParams()
 	kgc = &Models.KGC{
-		Key: pp.GenerateKeyPair(),
+		Key: pp.GenerateKeyPair1(),
 	}
 	device = &Models.Device{}
 )

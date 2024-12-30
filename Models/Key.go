@@ -5,7 +5,12 @@ import (
 	"math/big"
 )
 
-type Key struct {
+type Key1 struct {
 	PrivateKey *big.Int
 	PublicKey  *bn256.G2
+}
+
+type Key2 struct {
+	PrivateKey *big.Int
+	PublicKey  *bn256.G1
 }
